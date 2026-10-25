@@ -1,32 +1,33 @@
 import { createDrawerNavigator } from "@react-navigation/drawer";
+import { useSelector } from "react-redux";
 
 import Statistics from "../screens/Learning/Statistics";
 import Play from "../screens/Learning/Play";
-import { COLORS_DARK } from "../constants";
 
 const Drawer = createDrawerNavigator();
 
 function LearningNavigation() {
+  const colors = useSelector((state) => state.theme.colors);
 
   return (
     <Drawer.Navigator
       screenOptions={{
         headerTitleStyle: { fontWeight: "800" },
-        headerTintColor: COLORS_DARK.primary900,
+        headerTintColor: colors.primary900,
         headerTitleAlign: "center",
         headerStyle: {
-          backgroundColor: COLORS_DARK.appBackground,
+          backgroundColor: colors.appBackground,
         },
         drawerStyle: {
-          backgroundColor: COLORS_DARK.primary200,
+          backgroundColor: colors.primary200,
           width: 140,
           height: 130,
           borderBottomRightRadius: 20,
         },
-        drawerInactiveTintColor: COLORS_DARK.fontMain,
-        drawerActiveTintColor: COLORS_DARK.primary100,
-        drawerActiveBackgroundColor: COLORS_DARK.primary300,
-        contentStyle: { backgroundColor: COLORS_DARK.appBackground },
+        drawerInactiveTintColor: colors.fontMain,
+        drawerActiveTintColor: colors.primary100,
+        drawerActiveBackgroundColor: colors.primary300,
+        contentStyle: { backgroundColor: colors.appBackground },
       }}
     >
       <Drawer.Screen name="Statistics" component={Statistics} />

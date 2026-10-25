@@ -1,12 +1,15 @@
+import { useSelector } from "react-redux";
+import { useMemo } from "react";
 import { View, StyleSheet, Text } from "react-native";
-import { COLORS_DARK } from "../constants";
 
 function InfoCard({ color, caption, number }) {
+  const colors = useSelector((state) => state.theme.colors);
+  const styles = useMemo(() => createStyles(colors), [colors]);
   return (
     <View
       style={[
         styles.container,
-        { borderColor: color, backgroundColor: COLORS_DARK.fontInverse },
+        { borderColor: color, backgroundColor: colors.fontInverse },
       ]}
     >
       <Text style={[styles.number, { color: color }]}>{number}</Text>
@@ -17,7 +20,8 @@ function InfoCard({ color, caption, number }) {
 
 export default InfoCard;
 
-const styles = StyleSheet.create({
+const createStyles = (colors) =>
+  StyleSheet.create({
   container: {
     flex: 1,
     margin: 4,

@@ -1,3 +1,5 @@
+import { useSelector } from "react-redux";
+import { useMemo } from "react";
 import {
   View,
   FlatList,
@@ -7,11 +9,13 @@ import {
   Text,
 } from "react-native";
 import Item from "../../components/ListItem";
+import { selectWords } from "../../store/wordsLearningSlice";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { COLORS_DARK } from "../../constants";
 
 function AllWords({ navigation }) {
-  const words = [];
+  const colors = useSelector((state) => state.theme.colors);
+  const styles = useMemo(() => createStyles(colors), [colors]);
+  const words = useSelector(selectWords);
 
   return (
     <>
@@ -22,7 +26,7 @@ function AllWords({ navigation }) {
         <Ionicons
           name="add-outline"
           size={46}
-          color={COLORS_DARK.fontInverse}
+          color={colors.fontInverse}
         />
       </Pressable>
       <View style={{ flex: 2 }}>
@@ -49,7 +53,8 @@ function AllWords({ navigation }) {
   );
 }
 
-const styles = StyleSheet.create({
+const createStyles = (colors) =>
+  StyleSheet.create({
   imageContainer: {
     height: 220,
     alignItems: "center",
@@ -65,7 +70,7 @@ const styles = StyleSheet.create({
     aspectRatio: 1,
     top: 200,
     right: "10%",
-    backgroundColor: COLORS_DARK.primary900,
+    backgroundColor: colors.primary900,
     alignItems: "center",
     justifyContent: "center",
     zIndex: 10,
@@ -80,14 +85,14 @@ const styles = StyleSheet.create({
   },
   empty: {
     height: 300,
-    backgroundColor: COLORS_DARK.fontInverse,
+    backgroundColor: colors.fontInverse,
     alignItems: "center",
     justifyContent: "center",
     elevation: 5,
   },
   textEmpty: {
     fontSize: 40,
-    color: COLORS_DARK.primary200,
+    color: colors.primary200,
   },
 });
 

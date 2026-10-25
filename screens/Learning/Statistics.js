@@ -1,18 +1,22 @@
+import { useSelector } from "react-redux";
+import { useMemo } from "react";
 import { View, StyleSheet, Text, StatusBar, Pressable } from "react-native";
 import StatisticsInfo from "../../components/StatisticsInfo";
 import ImagePile from "../../components/ImagePile";
-import { COLORS_DARK } from "../../constants";
 
 export default function Statistics() {
+  const colors = useSelector((state) => state.theme.colors);
+  const styles = useMemo(() => createStyles(colors), [colors]);
   return (
-    <View style={[styles.container, { backgroundColor: COLORS_DARK.appBackground }]}>
+    <View style={[styles.container, { backgroundColor: colors.appBackground }]}>
       <StatisticsInfo />
       <ImagePile />
     </View>
   );
 }
 
-const styles = StyleSheet.create({
+const createStyles = (colors) =>
+  StyleSheet.create({
   container: {
     flex: 1,
   },

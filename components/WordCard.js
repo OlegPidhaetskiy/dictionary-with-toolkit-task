@@ -1,11 +1,15 @@
+import { useDispatch, useSelector } from "react-redux";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { View, Text, Pressable, StyleSheet } from "react-native";
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { playSound } from "../services/soundHandler";
-import { COLORS_DARK } from "../constants";
+import { wordsLearningActions } from "../store/wordsLearningSlice";
 
 function WordCard({ wordInfo, setNext }) {
+  const colors = useSelector((state) => state.theme.colors);
+  const styles = useMemo(() => createStyles(colors), [colors]);
   const [showFullInfo, setShowFullInfo] = useState(false);
+  const dispatch = useDispatch();
 
   return (
     <View style={styles.container}>
@@ -24,7 +28,7 @@ function WordCard({ wordInfo, setNext }) {
               <Ionicons
                 name="volume-medium-outline"
                 size={28}
-                color={COLORS_DARK.primary900}
+                color={colors.primary900}
               />
             </Pressable>
             <Text style={styles.meaning}>{wordInfo.meaning}</Text>
@@ -41,7 +45,7 @@ function WordCard({ wordInfo, setNext }) {
             style={({ pressed }) => [
               styles.remember,
               {
-                backgroundColor: COLORS_DARK.secondary800,
+                backgroundColor: colors.secondary800,
                 opacity: pressed ? 0.7 : 1,
               },
             ]}
@@ -56,7 +60,7 @@ function WordCard({ wordInfo, setNext }) {
             style={({ pressed }) => [
               styles.remember,
               {
-                backgroundColor: COLORS_DARK.primary900,
+                backgroundColor: colors.primary900,
                 opacity: pressed ? 0.7 : 1,
               },
             ]}
@@ -69,13 +73,14 @@ function WordCard({ wordInfo, setNext }) {
   );
 }
 
-const styles = StyleSheet.create({
+const createStyles = (colors) =>
+  StyleSheet.create({
   container: {
     flex: 1,
   },
   wordContainer: {
     flex: 4,
-    borderColor: COLORS_DARK.primary200,
+    borderColor: colors.primary200,
     margin: 10,
     borderWidth: 1,
     borderRadius: 4,
@@ -85,16 +90,16 @@ const styles = StyleSheet.create({
   },
   word: {
     fontSize: 28,
-    color: COLORS_DARK.fontMain,
+    color: colors.fontMain,
     fontWeight: "800",
   },
   phonetics: {
     fontSize: 18,
-    color: COLORS_DARK.fontMain,
+    color: colors.fontMain,
   },
   meaning: {
     fontSize: 18,
-    color: COLORS_DARK.fontMain,
+    color: colors.fontMain,
   },
   remember: {
     flex: 1,
@@ -105,7 +110,7 @@ const styles = StyleSheet.create({
   },
   rememberText: {
     fontSize: 20,
-    color: COLORS_DARK.fontInverse,
+    color: colors.fontInverse,
   },
   buttonsContainer: {
     flex: 1,

@@ -1,21 +1,23 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { useSelector } from "react-redux";
 
 import AllWords from "../screens/Words/AllWords";
 import AddWord from "../screens/Words/AddWord";
 import EditWord from "../screens/Words/EditWord";
-import { COLORS_DARK } from "../constants";
 
 const Stack = createNativeStackNavigator();
 
 function WordsNavigation() {
+  const colors = useSelector((state) => state.theme.colors);
+
   return (
     <Stack.Navigator
       screenOptions={{
         headerTitleStyle: { fontWeight: "800" },
         headerTransparent: true,
-        headerTintColor: COLORS_DARK.primary900,
+        headerTintColor: colors.primary900,
         headerTitleAlign: "center",
-        contentStyle: { backgroundColor: COLORS_DARK.appBackground },
+        contentStyle: { backgroundColor: colors.appBackground },
       }}
     >
       <Stack.Screen

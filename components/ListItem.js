@@ -1,12 +1,17 @@
+import { useDispatch, useSelector } from "react-redux";
+import { useMemo } from "react";
 import { View, StyleSheet, Text, StatusBar, Pressable } from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useNavigation } from "@react-navigation/native";
 
 import { playSound } from "../services/soundHandler";
-import { COLORS_DARK } from "../constants";
+import { wordsLearningActions } from "../store/wordsLearningSlice";
 
 function Item({ item }) {
+  const colors = useSelector((state) => state.theme.colors);
+  const styles = useMemo(() => createStyles(colors), [colors]);
   const navigation = useNavigation();
+  const dispatch = useDispatch();
 
   return (
     <View style={styles.item}>
@@ -17,8 +22,8 @@ function Item({ item }) {
             size={28}
             style={
               !item.audio
-                ? { color: COLORS_DARK.grey300 }
-                : { color: COLORS_DARK.primary900 }
+                ? { color: colors.grey300 }
+                : { color: colors.primary900 }
             }
           />
         </View>
@@ -34,7 +39,7 @@ function Item({ item }) {
               item.status === 0 ? "dead" : item.status === 1 ? "half" : "full"
             }-sharp`}
             size={18}
-            color={COLORS_DARK.primary900}
+            color={colors.primary900}
           />
         </View>
         <Text style={styles.definition}>{item.meaning}</Text>
@@ -46,17 +51,18 @@ function Item({ item }) {
         <Ionicons
           name="trash-outline"
           size={22}
-          color={COLORS_DARK.secondary800}
+          color={colors.secondary800}
         />
       </Pressable>
     </View>
   );
 }
 
-const styles = StyleSheet.create({
+const createStyles = (colors) =>
+  StyleSheet.create({
     item: {
       zIndex: -10,
-      backgroundColor: COLORS_DARK.fontInverse,
+      backgroundColor: colors.fontInverse,
       flexDirection: "row",
       marginVertical: 6,
       marginHorizontal: 5,
@@ -68,12 +74,12 @@ const styles = StyleSheet.create({
     title: {
       fontSize: 20,
       fontWeight: "800",
-      color: COLORS_DARK.fontMain,
+      color: colors.fontMain,
       paddingRight: 20,
     },
     definition: {
       fontSize: 16,
-      color: COLORS_DARK.fontMain,
+      color: colors.fontMain,
     },
     iconContainer: {
       padding: 3,

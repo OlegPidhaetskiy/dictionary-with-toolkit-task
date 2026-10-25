@@ -2,33 +2,47 @@ import "react-native-gesture-handler";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { NavigationContainer } from "@react-navigation/native";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 import WordsNavigation from "./WordsNavigation";
 import LearningNavigation from "./LearningNavigation";
 import Settings from "../screens/Settings";
 import { StatusBar } from "react-native";
-import { COLORS_DARK } from "../constants";
+import * as constants from "../constants";
+import { wordsLearningActions } from "../store/wordsLearningSlice";
 
 const Tab = createBottomTabNavigator();
 
 function MainNavigator() {
+  const dispatch = useDispatch();
+  const { isDark, colors } = useSelector((state) => state.theme);
+
+  // periodically refresh learning statuses of the words
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      dispatch(wordsLearningActions.updateStatuses());
+    }, constants.REFRESH_STATUSES_SPAN);
+    return () => clearInterval(intervalId);
+  }, [dispatch]);
+
   return (
     <>
       <StatusBar
-        backgroundColor={COLORS_DARK.appBackground}
-        barStyle={true ? "light-content" : "dark-content"}
+        backgroundColor={colors.appBackground}
+        barStyle={isDark ? "light-content" : "dark-content"}
       />
       <NavigationContainer>
         <Tab.Navigator
           screenOptions={{
             headerTitleStyle: { fontWeight: "800" },
-            tabBarActiveTintColor: COLORS_DARK.primary900,
-            tabBarActiveBackgroundColor: COLORS_DARK.appBackground,
-            tabBarInactiveBackgroundColor: COLORS_DARK.appBackground,
+            tabBarActiveTintColor: colors.primary900,
+            tabBarActiveBackgroundColor: colors.appBackground,
+            tabBarInactiveBackgroundColor: colors.appBackground,
             headerStyle: {
-              backgroundColor: COLORS_DARK.appBackground,
+              backgroundColor: colors.appBackground,
             },
-            headerTintColor: COLORS_DARK.primary900,
+            headerTintColor: colors.primary900,
             headerTitleAlign: "center",
           }}
         >

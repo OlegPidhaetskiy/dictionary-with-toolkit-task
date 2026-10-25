@@ -1,3 +1,4 @@
+import { useDispatch, useSelector } from "react-redux";
 import {
   View,
   StyleSheet,
@@ -6,16 +7,19 @@ import {
   Image,
   Pressable,
 } from "react-native";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 
 import { getWordInfo } from "../../services/wordsHandler";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { playSound } from "../../services/soundHandler";
-import { COLORS_DARK } from "../../constants";
+import { wordsLearningActions } from "../../store/wordsLearningSlice";
 
 function AddWord({ navigation }) {
+  const colors = useSelector((state) => state.theme.colors);
+  const styles = useMemo(() => createStyles(colors), [colors]);
   const [text, setText] = useState();
   const [wordData, setWordData] = useState();
+  const dispatch = useDispatch();
 
   function onChangeText(text) {
     setWordData(undefined);
@@ -40,9 +44,8 @@ function AddWord({ navigation }) {
   }, [navigation, wordData]);
 
   function onAdd() {
-    navigation.navigate(
-      "AllWords"
-    );
+    dispatch(wordsLearningActions.addWord(wordData));
+    navigation.navigate("AllWords");
   }
 
   return (
@@ -66,7 +69,7 @@ function AddWord({ navigation }) {
           onChangeText={onChangeText}
           value={text}
           placeholder="type here.."
-          placeholderTextColor={COLORS_DARK.grey600}
+          placeholderTextColor={colors.grey600}
         />
       </View>
       {wordData && (
@@ -81,7 +84,7 @@ function AddWord({ navigation }) {
                 <Ionicons
                   name="volume-medium-outline"
                   size={28}
-                  color={COLORS_DARK.primary900}
+                  color={colors.primary900}
                 />
               </Pressable>
             )}
@@ -91,7 +94,7 @@ function AddWord({ navigation }) {
           <Text style={styles.meaning}>{wordData.meaning}</Text>
           {wordData.word && (
             <Pressable style={styles.buttonContainer} onPress={onAdd}>
-              <Text style={{ fontSize: 24, color: COLORS_DARK.fontInverse }}>
+              <Text style={{ fontSize: 24, color: colors.fontInverse }}>
                 Add
               </Text>
             </Pressable>
@@ -102,19 +105,20 @@ function AddWord({ navigation }) {
   );
 }
 
-const styles = StyleSheet.create({
+const createStyles = (colors) =>
+  StyleSheet.create({
     input: {
       height: 40,
       fontSize: 18,
-      borderColor: COLORS_DARK.primary200,
+      borderColor: colors.primary200,
       borderWidth: 1,
       borderRadius: 5,
       padding: 10,
-      color: COLORS_DARK.fontMain,
+      color: colors.fontMain,
     },
     label: {
       fontSize: 12,
-      color: COLORS_DARK.grey600,
+      color: colors.grey600,
       marginBottom: 4,
     },
     inputContainer: {
@@ -129,26 +133,26 @@ const styles = StyleSheet.create({
     word: {
       fontSize: 32,
       paddingHorizontal: 10,
-      color: COLORS_DARK.fontMain,
+      color: colors.fontMain,
     },
     phonetics: {
       fontSize: 20,
       paddingHorizontal: 10,
-      color: COLORS_DARK.fontMain,
+      color: colors.fontMain,
     },
     partOfSpeech: {
       fontSize: 20,
       paddingHorizontal: 10,
-      color: COLORS_DARK.fontMain,
+      color: colors.fontMain,
     },
     meaning: {
       fontSize: 16,
       padding: 13,
-      color: COLORS_DARK.fontMain,
+      color: colors.fontMain,
     },
     buttonContainer: {
       borderRadius: 4,
-      backgroundColor: COLORS_DARK.primary900,
+      backgroundColor: colors.primary900,
       height: 40,
       alignItems: "center",
       justifyContent: "center",

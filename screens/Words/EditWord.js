@@ -1,3 +1,4 @@
+import { useDispatch, useSelector } from "react-redux";
 import {
   View,
   StyleSheet,
@@ -8,13 +9,17 @@ import {
 } from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { playSound } from "../../services/soundHandler";
-import { useState } from "react";
-import { COLORS_DARK } from "../../constants";
+import { wordsLearningActions } from "../../store/wordsLearningSlice";
+import { useState, useMemo } from "react";
 
 function EditWord({ route, navigation }) {
+  const colors = useSelector((state) => state.theme.colors);
+  const styles = useMemo(() => createStyles(colors), [colors]);
   const [wordData, setWordData] = useState(() => route.params.wordData);
+  const dispatch = useDispatch();
 
   function onSave() {
+    dispatch(wordsLearningActions.updateWord(wordData));
     navigation.navigate("AllWords");
   }
 
@@ -48,7 +53,7 @@ function EditWord({ route, navigation }) {
               <Ionicons
                 name="volume-medium-outline"
                 size={28}
-                color={COLORS_DARK.primary900}
+                color={colors.primary900}
               />
             </Pressable>
           )}
@@ -82,7 +87,7 @@ function EditWord({ route, navigation }) {
         />
         {wordData.word && (
           <Pressable style={styles.buttonContainer} onPress={onSave}>
-            <Text style={{ fontSize: 24, color: COLORS_DARK.fontInverse }}>
+            <Text style={{ fontSize: 24, color: colors.fontInverse }}>
               Save
             </Text>
           </Pressable>
@@ -92,17 +97,18 @@ function EditWord({ route, navigation }) {
   );
 }
 
-const styles = StyleSheet.create({
+const createStyles = (colors) =>
+  StyleSheet.create({
   input: {
     borderWidth: 1,
     borderRadius: 5,
     paddingHorizontal: 6,
-    borderColor: COLORS_DARK.primary200,
-    color: COLORS_DARK.fontMain,
+    borderColor: colors.primary200,
+    color: colors.fontMain,
   },
   label: {
     fontSize: 12,
-    color: COLORS_DARK.grey600,
+    color: colors.grey600,
     marginBottom: 4,
     paddingTop: 10,
   },
@@ -118,7 +124,7 @@ const styles = StyleSheet.create({
   word: {
     fontSize: 32,
     paddingHorizontal: 10,
-    color: COLORS_DARK.fontMain,
+    color: colors.fontMain,
   },
   phonetics: {
     fontSize: 20,
@@ -134,7 +140,7 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     borderRadius: 4,
-    backgroundColor: COLORS_DARK.primary900,
+    backgroundColor: colors.primary900,
     height: 40,
     alignItems: "center",
     justifyContent: "center",
